@@ -17,8 +17,6 @@ public class HibernateTestHarness
 	public static void main(String[] args)
 	{
 		Student testStudent = new Student("Jessica Ennis", "Toni Minichiello");
-
-		System.out.println("This student has an id of : " + testStudent.getId());
 		
 		// save the student to the database
 
@@ -26,12 +24,23 @@ public class HibernateTestHarness
 		Session session = sf.openSession();
 
 		Transaction tx = session.beginTransaction();
-		session.save(testStudent);
+		try{
+			session.save(testStudent);
+			
+			System.out.println("The student now has an id of " + testStudent.getId());
+			
+			tx.commit();
+		}catch(Exception e){
+			if(tx!=null)
+				//you should throw an exception here
+				tx.rollback();
+		}
+		finally{
+			if(session!=null){
+				session.close();
+			}
+		}
 		
-		System.out.println("The student now has an id of " + testStudent.getId());
-		
-		tx.commit();
-		session.close();
 	}
 
 	public static SessionFactory getSessionFactory()
