@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  * Represents a Student enrolled in the college management
@@ -18,7 +20,10 @@ public class Student
 	
     private String enrollmentID;
     private String name;
-    private String tutorName; // This will become a class soon
+    
+    @ManyToOne
+    @JoinColumn(name="TUTOR_FK")
+    private Tutor supervisorName; // This will become a class soon
     
     /*
      * Required by Hibernate
@@ -34,7 +39,7 @@ public class Student
     public Student(String name, String tutorName)
     {
     	this.name = name;
-    	this.tutorName = tutorName;
+    	this.supervisorName = supervisorName;
     }
     
     /**
@@ -43,7 +48,7 @@ public class Student
     public Student(String name)
     {
     	this.name = name;
-    	this.tutorName = null;
+    	this.supervisorName = null;
     }
     
     public double calculateGradePointAverage()
@@ -64,4 +69,32 @@ public class Student
     {
     	return this.id;
     }
+
+	public String getEnrollmentID() {
+		return enrollmentID;
+	}
+
+	public void setEnrollmentID(String enrollmentID) {
+		this.enrollmentID = enrollmentID;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Tutor getSupervisorName() {
+		return supervisorName;
+	}
+
+	public void setSupervisorName(Tutor supervisorName) {
+		this.supervisorName = supervisorName;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 }
