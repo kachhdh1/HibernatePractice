@@ -1,5 +1,7 @@
 package com.dharmik.hibernate;
 
+import java.util.Set;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -26,17 +28,29 @@ public class HibernateTestHarness
 		Transaction tx = session.beginTransaction();
 		try{
 			// create a new tutor, and a student
-			Student myStudent = new Student("Alicia Coutts", "5-COU-2009");
-			Tutor newTutor = new Tutor ("DEF456", 939383);
+			Tutor newTutor = new Tutor("Adrian Nathan", 3876383);
 			
-			session.save(myStudent);
+			Student student1 = new Student ("Rebecca Soni", "1-SON-2012");
+			Student student2 = new Student ("Zou Kai", "2-KAI-2009");
+			Student student3 = new Student ("Chris Hoy", "3-HOY-1997");
+			
+			session.save(student1);
+			session.save(student2);
+			session.save(student3);
 			session.save(newTutor);
 			
-			// make the student be supervised by that tutor
-			myStudent.setSupervisorName(newTutor);
+			newTutor.addStudentToSupervisionGroup(student1);
+			newTutor.addStudentToSupervisionGroup(student2);
+			newTutor.addStudentToSupervisionGroup(student3);
 			
-			// print out the supervisor for this tutor
-			System.out.println(myStudent.getSupervisorName());
+			/* Uncomment this code to query a tutor and print their supervision group */
+			Tutor myTutor = (Tutor)session.get(Tutor.class, 1);
+			Set<Student> students = myTutor.getSupervisionGroup();
+			
+			for(Student next: students)
+			{
+				System.out.println(next);
+			}
 			
 			tx.commit();
 		}catch(Exception e){
