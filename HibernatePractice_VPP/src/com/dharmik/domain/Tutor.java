@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -21,12 +23,17 @@ public class Tutor {
 
 	@OneToMany(mappedBy="supervisor")
 	private Set<Student> supervisionGroup;
+	
+	@ManyToMany(mappedBy="qualifiedTutors")
+	private Set<Subject> subjectQualifiedToTeach;
+	
 
 	public Tutor(String name, int salary) {
 		super();
 		this.name = name;
 		this.salary = salary;
 		this.supervisionGroup = new HashSet<Student>();
+		this.subjectQualifiedToTeach = new HashSet<Subject>();
 	}
 
 	private int salary;
@@ -67,6 +74,18 @@ public class Tutor {
 		Set<Student> unmodifiable = Collections
 				.unmodifiableSet(this.supervisionGroup);
 		return unmodifiable;
+	}
+
+	public Set<Subject> getSubjectQualifiedToTeach() {
+		return subjectQualifiedToTeach;
+	}
+
+	public void setSubjectQualifiedToTeach(Set<Subject> subjectQualifiedToTeach) {
+		this.subjectQualifiedToTeach = subjectQualifiedToTeach;
+	}
+	
+	public void addSubjectToQialification(Subject subject){
+		this.subjectQualifiedToTeach.add(subject);
 	}
 
 }

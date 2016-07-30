@@ -25,6 +25,7 @@
 		<!-- Names the annotated entity class -->
 		<mapping class="com.dharmik.domain.Student"/>
 		<mapping class="com.dharmik.domain.Tutor"/>
+		<mapping class="com.dharmik.domain.Subject"/>
 	</session-factory>
 
 </hibernate-configuration>

@@ -10,6 +10,7 @@ import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 
 import com.dharmik.domain.Student;
+import com.dharmik.domain.Subject;
 import com.dharmik.domain.Tutor;
 
 
@@ -48,14 +49,31 @@ public class HibernateTestHarness
 			student2.setSupervisor(newTutor);
 			student3.setSupervisor(newTutor);
 			
-			/* Uncomment this code to query a tutor and print their supervision group */
+			// test out creating a couple of subjects
+			Subject subject1 = new Subject("Math", 3);
+			Subject subject2 = new Subject("Science", 6);
+			
+			session.save(subject1);
+			session.save(subject2);
+			
+			newTutor.addSubjectToQialification(subject1);
+			newTutor.addSubjectToQialification(subject2);
+
+			
+			Tutor secondTutor = new Tutor("Ben Ainslie", 3883833);
+			session.save(secondTutor);
+			
+			subject2.addTutorToSubject(secondTutor);
+			subject1.addTutorToSubject(secondTutor);
+			
+			/* Uncomment this code to query a tutor and print their supervision group 
 			Tutor myTutor = (Tutor)session.get(Tutor.class, 1);
 			Set<Student> students = myTutor.getSupervisionGroup();
 			
 			for(Student next: students)
 			{
 				System.out.println(next);
-			}
+			}*/
 			
 			tx.commit();
 		}catch(Exception e){
