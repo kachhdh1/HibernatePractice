@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -20,11 +19,7 @@ public class Tutor {
 
 	private String name;
 
-	// if we do not put the annotation of joinColumn,
-	// hibernate will default and will make a
-	// mapping table TUTOR_STUDENT instead.
-	@OneToMany
-	@JoinColumn(name = "TUTOR_FK")
+	@OneToMany(mappedBy="supervisor")
 	private Set<Student> supervisionGroup;
 
 	public Tutor(String name, int salary) {

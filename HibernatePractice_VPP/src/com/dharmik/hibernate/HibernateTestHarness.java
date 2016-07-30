@@ -43,6 +43,11 @@ public class HibernateTestHarness
 			newTutor.addStudentToSupervisionGroup(student2);
 			newTutor.addStudentToSupervisionGroup(student3);
 			
+			//it will be solved when we use Cascade
+			student1.setSupervisor(newTutor);
+			student2.setSupervisor(newTutor);
+			student3.setSupervisor(newTutor);
+			
 			/* Uncomment this code to query a tutor and print their supervision group */
 			Tutor myTutor = (Tutor)session.get(Tutor.class, 1);
 			Set<Student> students = myTutor.getSupervisionGroup();
