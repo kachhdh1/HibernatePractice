@@ -2,15 +2,14 @@ package com.dharmik.hibernate;
 
 import java.util.Set;
 
-import org.hibernate.Session;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
 
 import com.dharmik.domain.Student;
-import com.dharmik.domain.Subject;
 import com.dharmik.domain.Tutor;
 
 
@@ -21,15 +20,12 @@ public class HibernateTestHarness
 	public static void main(String[] args)
 	{
 		
-		// save the student to the database
-
-		SessionFactory sf = getSessionFactory();
-		Session session = sf.openSession();
-
-		Transaction tx = session.beginTransaction();
+		
 		try{
+			
+			
 			// create a new tutor, and a student
-			Tutor newTutor = new Tutor("Adrian Nathan", 3876383);
+			/*Tutor newTutor = new Tutor("Adrian Nathan", 3876383);
 			
 			Student student1 = new Student ("Rebecca Soni", "1-SON-2012");
 			Student student2 = new Student ("Zou Kai", "2-KAI-2009");
@@ -65,7 +61,7 @@ public class HibernateTestHarness
 			
 			subject2.addTutorToSubject(secondTutor);
 			subject1.addTutorToSubject(secondTutor);
-			
+*/			
 			/* Uncomment this code to query a tutor and print their supervision group 
 			Tutor myTutor = (Tutor)session.get(Tutor.class, 1);
 			Set<Student> students = myTutor.getSupervisionGroup();
@@ -75,33 +71,30 @@ public class HibernateTestHarness
 				System.out.println(next);
 			}*/
 			
-			tx.commit();
-		}catch(Exception e){
-			if(tx!=null)
-				//you should throw an exception here
-				tx.rollback();
-		}
-		finally{
-			if(session!=null){
-				session.close();
+			EntityManagerFactory emf = Persistence.createEntityManagerFactory("myDatabaseConfig");
+			EntityManager em = emf.createEntityManager();
+			EntityTransaction tx = em.getTransaction();
+			tx.begin();
+			Tutor myTutor = em.find(Tutor.class, 1);
+			
+			System.out.println(myTutor);
+			
+			Set<Student> students = myTutor.getSupervisionGroup();
+			for(Student next: students)
+			{
+				System.out.println(next);
 			}
+					
+			Student myStudent = em.find(Student.class, 2);
+			System.out.println(myStudent);
+			
+			tx.commit();
+			em.close();
+			
+		}catch(Exception e){
+			
 		}
 		
 	}
 
-	public static SessionFactory getSessionFactory()
-	{
-		if (sessionFactory == null)
-		{
-			Configuration configuration = new Configuration();
-			configuration.configure();
-			
-			ServiceRegistry serviceRegistry = new 
-					ServiceRegistryBuilder().applySettings(configuration.getProperties())
-					.buildServiceRegistry();        
-
-			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-		}
-		return sessionFactory;
-	}			
 }
