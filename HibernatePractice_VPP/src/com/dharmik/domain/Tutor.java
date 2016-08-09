@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,7 +22,7 @@ public class Tutor {
 
 	private String name;
 
-	@OneToMany(mappedBy="supervisor")
+	@OneToMany(mappedBy="supervisor",cascade=CascadeType.PERSIST)
 	private Set<Student> supervisionGroup;
 	
 	@ManyToMany(mappedBy="qualifiedTutors")
@@ -66,8 +67,12 @@ public class Tutor {
 		this.salary = salary;
 	}
 
-	public void addStudentToSupervisionGroup(Student studentToAdd) {
-		this.supervisionGroup.add(studentToAdd);
+	public void addStudentToSupervisionGroup(String name, String enrollmentID) {
+		Student student = new Student(name,enrollmentID);
+		this.supervisionGroup.add(student);
+		//since this is a bidirectional relationship,
+		//we need to maintain both the relationship, else the tutor_fk will be null
+		student.setSupervisor(this);
 	}
 
 	public Set<Student> getSupervisionGroup() {
