@@ -1,11 +1,13 @@
 package com.dharmik.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  * Represents a Student enrolled in the college management
@@ -25,6 +27,10 @@ public class Student
     @JoinColumn(name="TUTOR_FK")
     private Tutor supervisor;
     
+    @OneToOne(cascade=CascadeType.PERSIST)
+    @JoinColumn(name="ADDRESS_FK")
+    private Address address;
+    
     /*
      * Required by Hibernate
      */
@@ -36,10 +42,11 @@ public class Student
     /**
      * Initialises a student with a particular tutor
      */
-    public Student(String name, Tutor supervisorName)
+    public Student(String name, Tutor supervisorName,Address address)
     {
     	this.name = name;
     	this.supervisor = supervisorName;
+    	this.address = address;
     }
     
     /**
@@ -97,6 +104,10 @@ public class Student
 
 	public void setSupervisor(Tutor supervisor) {
 		this.supervisor = supervisor;
+	}
+	
+	public void allocateAddress(Address address){
+		this.address = address;
 	}
 	
 	
